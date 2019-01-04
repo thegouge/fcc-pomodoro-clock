@@ -5,6 +5,9 @@ export default function Toolbar(props) {
     <div>
       <div id="session-stuff" />
       <div id="break-stuff" />
+      <div id="buttons">
+        <button onClick={props.start}>Start</button>
+      </div>
     </div>
   );
 }
