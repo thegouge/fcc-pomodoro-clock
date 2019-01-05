@@ -1,3 +1,22 @@
 .App {
+  padding: 30px;
   text-align: center;
+  transition: 0.5s;
+}
+
+.counting {
+  background: black;
+  color: white;
+}
+
+#tool-bar {
+  margin: auto;
+  padding: 30px;
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+}
+
+audio {
+  padding: 30px;
 }
