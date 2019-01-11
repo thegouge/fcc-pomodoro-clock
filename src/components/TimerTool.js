@@ -2,10 +2,10 @@ import React, {Component} from "react";
 
 export default class TimerTool extends Component {
   increment = () => {
-    this.props.inc(this.props.label);
+    this.props.change("increment" + this.props.label);
   };
   decrement = () => {
-    this.props.dec(this.props.label);
+    this.props.change("decrement" + this.props.label);
   };
 
   render() {
@@ -18,7 +18,7 @@ export default class TimerTool extends Component {
         <button id={`${label}-increment`} onClick={this.increment}>
           &uarr;
         </button>
-        <p id={`sesssion-length`}>{minutes}</p>
+        <p id={`${this.props.label}-length`}>{minutes}</p>
         <button id={`${label}-decrement`} onClick={this.decrement}>
           &darr;
         </button>

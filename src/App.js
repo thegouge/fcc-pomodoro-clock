@@ -13,97 +13,108 @@ class App extends Component {
       sessionMinutes: 25,
       breakMinutes: 5,
       timeLeft: 1500,
-      appClassNames: "App",
       timerID: "",
       breakTime: false,
       counting: false
     };
   }
 
-  tick = () => {
-    const timeLeftBefore = this.state.timeLeft;
+  startCountdown = () => {
+    this.setState({
+      timerID: setInterval(this.tick(this.state.timeLeft), 1000),
+      counting: true
+    });
+  };
+
+  tick = (timeLeftBefore) => {
     if (timeLeftBefore <= 0) {
       this.stopCountDown();
+      setTimeout(this.moveToNextTimer(), 1000);
     } else {
       this.setState({
         timeLeft: timeLeftBefore - 1
       });
     }
   };
-  startCountdown = () => {
+
+  moveToNextTimer = () => {
+    const {breakTime, breakMinutes, sessionMinutes} = this.state;
     this.setState({
-      appClassNames: "App counting",
-      timerID: setInterval(this.tick, 1000),
-      counting: true
+      breakTime: !breakTime,
+      timeLeft: !breakTime ? breakMinutes * 60 : sessionMinutes * 60
     });
+    this.startCountdown();
   };
+
   stopCountDown = () => {
     clearInterval(this.state.timerID);
     this.setState({
-      counting: false,
-      appClassNames: "App"
+      counting: false
     });
   };
 
-  increment = (flag) => {
-    if (flag === "session") {
-      this.setState({
-        sessionMinutes: this.state.sessionMinutes + 1
-      });
-    } else {
-      this.setState({
-        breakMinutes: this.state.breakMinutes + 1
-      });
-    }
-    this.updateTimeLeft();
+  resetState = () => {
+    this.stopCountDown();
+    this.setState({
+      sessionMinutes: 25,
+      breakMinutes: 5,
+      timeLeft: 1500,
+      timerID: "",
+      breakTime: false,
+      counting: false
+    });
   };
 
-  decrement = (flag) => {
-    if (flag === "session") {
-      if (parseInt(this.state.sessionMinutes) > 1) {
-        this.setState({
-          sessionMinutes: this.state.sessionMinutes - 1
-        });
-      }
-    } else {
-      if (parseInt(this.state.breakMinutes) > 1) {
-        this.setState({
-          breakMinutes: this.state.breakMinutes - 1
-        });
-      }
-    }
-    this.updateTimeLeft();
-  };
+  changeMinutes = (flag) => {
+    let {sessionMinutes, breakMinutes} = this.state;
+    switch (flag) {
+      case "incrementsession":
+        if (sessionMinutes < 60) ++sessionMinutes;
+        break;
 
-  updateTimeLeft = () => {
-    if (this.state.breakTime) {
-      this.setState({timeLeft: this.state.breakMinutes * 60});
-    } else {
-      this.setState({timeLeft: this.state.sessionMinutes * 60});
+      case "decrementsession":
+        if (parseInt(this.state.sessionMinutes) > 1) --sessionMinutes;
+        break;
+
+      case "incrementbreak":
+        if (breakMinutes < 60) ++breakMinutes;
+        break;
+
+      case "decrementbreak":
+        if (parseInt(this.state.breakMinutes) > 1) --breakMinutes;
+        break;
+
+      default:
+        break;
     }
+
+    this.setState({
+      sessionMinutes: sessionMinutes,
+      breakMinutes: breakMinutes,
+      timeLeft: this.state.breakTime ? breakMinutes * 60 : sessionMinutes * 60
+    });
   };
 
   render() {
     return (
-      <div className={this.state.appClassNames}>
+      <div className={this.state.counting ? "App counting" : "App"}>
         <Timer
           start={this.startCountdown}
           stop={this.stopCountDown}
           timeLeft={this.state.timeLeft}
           breakTime={this.state.breakTime}
           counting={this.state.counting}
+          resetState={this.resetState}
         />
         <div id="tool-bar">
           <TimerTool
-            inc={this.increment}
-            dec={this.decrement}
+            change={this.changeMinutes}
             label="session"
             minutes={this.state.sessionMinutes}
           />
 
           <TimerTool
-            inc={this.increment}
-            dec={this.decrement}
+            change={this.changeMinutes}
             label="break"
             minutes={this.state.breakMinutes}
           />
