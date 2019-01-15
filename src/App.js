@@ -5,6 +5,7 @@ import Timer from "./components/Timer";
 import Footer from "./components/Footer";
 
 import "./css/App.css";
+import alarm from "./assets/Rooster-Crow.wav";
 
 class App extends Component {
   constructor(props) {
@@ -21,19 +22,22 @@ class App extends Component {
 
   startCountdown = () => {
     this.setState({
-      timerID: setInterval(this.tick(this.state.timeLeft), 1000),
+      timerID: setInterval(this.tick, 1000),
       counting: true
     });
   };
 
-  tick = (timeLeftBefore) => {
+  tick = () => {
+    const timeLeftBefore = this.state.timeLeft;
+    this.setState({
+      timeLeft: timeLeftBefore - 1
+    });
+
     if (timeLeftBefore <= 0) {
+      this.playAlarm();
       this.stopCountDown();
-      setTimeout(this.moveToNextTimer(), 1000);
-    } else {
-      this.setState({
-        timeLeft: timeLeftBefore - 1
-      });
+      this.moveToNextTimer();
+      setTimeout(this.stopAlarm, 5000);
     }
   };
 
@@ -53,8 +57,9 @@ class App extends Component {
     });
   };
 
-  resetState = () => {
+  resetTimer = () => {
     this.stopCountDown();
+    this.stopAlarm();
     this.setState({
       sessionMinutes: 25,
       breakMinutes: 5,
@@ -64,6 +69,16 @@ class App extends Component {
       counting: false
     });
   };
+
+  stopAlarm = () => {
+    const audio = document.getElementById("beep");
+    audio.pause();
+    audio.currentTime = 0;
+  };
+
+  playAlarm() {
+    document.getElementById("beep").play();
+  }
 
   changeMinutes = (flag) => {
     let {sessionMinutes, breakMinutes} = this.state;
@@ -104,7 +119,7 @@ class App extends Component {
           timeLeft={this.state.timeLeft}
           breakTime={this.state.breakTime}
           counting={this.state.counting}
-          resetState={this.resetState}
+          resetTimer={this.resetTimer}
         />
         <div id="tool-bar">
           <TimerTool
@@ -119,7 +134,7 @@ class App extends Component {
             minutes={this.state.breakMinutes}
           />
         </div>
-        <audio id="beep" src="#" />
+        <audio id="beep" src={alarm} preload="auto" loop />
         <Footer />
       </div>
     );

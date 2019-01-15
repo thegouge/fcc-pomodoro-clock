@@ -11,6 +11,7 @@ export default class Timer extends Component {
       ++minutes;
     }
 
+    if (seconds < 0) seconds = "0";
     if (seconds < 10) seconds = "0" + seconds;
     if (minutes < 10) minutes = "0" + minutes;
 
@@ -28,7 +29,7 @@ export default class Timer extends Component {
           <button id="start_stop" onClick={counting ? stop : start}>
             {counting ? "Stop" : "Start"}
           </button>
-          <button id="reset" onClick={this.props.resetState}>
+          <button id="reset" onClick={this.props.resetTimer}>
             Reset
           </button>
         </div>
