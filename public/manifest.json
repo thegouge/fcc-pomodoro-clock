@@ -3,8 +3,8 @@
   "name": "Free Code Camp Pomodoro Clock",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "src": "tomato.ico",
+      "sizes": "16x16",
       "type": "image/x-icon"
     }
   ],
