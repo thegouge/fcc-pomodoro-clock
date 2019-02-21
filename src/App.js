@@ -1,4 +1,6 @@
 import React, {Component} from "react";
+import {Provider} from "react-redux";
+import store from "./store/store";
 
 import TimerTool from "./components/TimerTool";
 import Timer from "./components/Timer";
@@ -76,9 +78,9 @@ class App extends Component {
     audio.currentTime = 0;
   };
 
-  playAlarm() {
+  playAlarm = () => {
     document.getElementById("beep").play();
-  }
+  };
 
   changeMinutes = (flag) => {
     let {sessionMinutes, breakMinutes} = this.state;
@@ -112,31 +114,33 @@ class App extends Component {
 
   render() {
     return (
-      <div className={this.state.counting ? "App counting" : "App"}>
-        <Timer
-          start={this.startCountdown}
-          stop={this.stopCountDown}
-          timeLeft={this.state.timeLeft}
-          breakTime={this.state.breakTime}
-          counting={this.state.counting}
-          resetTimer={this.resetTimer}
-        />
-        <div id="tool-bar">
-          <TimerTool
-            change={this.changeMinutes}
-            label="session"
-            minutes={this.state.sessionMinutes}
+      <Provider store={store}>
+        <div className={this.state.counting ? "App counting" : "App"}>
+          <Timer
+            start={this.startCountdown}
+            stop={this.stopCountDown}
+            timeLeft={this.state.timeLeft}
+            breakTime={this.state.breakTime}
+            counting={this.state.counting}
+            resetTimer={this.resetTimer}
           />
+          <div id="tool-bar">
+            <TimerTool
+              change={this.changeMinutes}
+              label="session"
+              minutes={this.state.sessionMinutes}
+            />
 
-          <TimerTool
-            change={this.changeMinutes}
-            label="break"
-            minutes={this.state.breakMinutes}
-          />
+            <TimerTool
+              change={this.changeMinutes}
+              label="break"
+              minutes={this.state.breakMinutes}
+            />
+          </div>
+          <audio id="beep" src={alarm} preload="auto" loop />
+          <Footer />
         </div>
-        <audio id="beep" src={alarm} preload="auto" loop />
-        <Footer />
-      </div>
+      </Provider>
     );
   }
 }

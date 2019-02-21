@@ -1,0 +1,11 @@
+export const START_COUNTDOWN = "START_COUNTDOWN";
+export const END_COUNTDOWN = "END_COUNTDOWN";
+export const TICK = "TICK";
+
+export const INCREMENT_SESSION = "INCREMENT_SESSION";
+export const DECREMENT_SESSION = "DECREMENT_SESSION";
+export const INCREMENT_BREAK = "INCREMENT_BREAK";
+export const DECREMENT_BREAK = "DECREMENT_BREAK";
+
+export const START_BREAK = "START_BREAK";
+export const END_BREAK = "END_BREAK";
